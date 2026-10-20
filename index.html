@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>어반스케치 초보자 클래스</title>
+<meta name="description" content="그림을 처음 그리는 분을 위한 어반스케치 8주 과정. 강사의 집에서 소수 인원으로, 재료는 모두 제공합니다.">
+<meta property="og:title" content="어반스케치 초보자 8주 과정">
+<meta property="og:description" content="선 하나 긋는 것부터, 편안한 집에서. 8주 뒤 야외에서 스케치 한 장을 완성합니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: 좌측 정렬 편집형 단일 페이지. 모바일 1열 → 데스크톱(900px~) 좌측 제목열 + 우측 내용열. TDS Mobile 블루 + 크림 히어로, 라이트 단일 테마 */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f9fafb;
+  --bg-mute: #f2f4f6;
+  --bg-warm: #fff9e7;
+  --line: #e5e8eb;
+  --line-strong: #d1d6db;
+  --fg: #191f28;
+  --fg-2: #4e5968;
+  --fg-3: #6b7684;
+  --accent: #3182f6;
+  --accent-press: #2272eb;
+  --accent-ink: #1b64da;
+  --accent-soft: #e8f3ff;
+  --accent-soft-2: #c9e2ff;
+  --on-accent: #ffffff;
+  /* 커리큘럼 단계 색 */
+  --c-line: #3182f6;
+  --c-struct: #18a5a5;
+  --c-color: #fe9800;
+  --c-field: #03b26c;
+  --danger: #d22030;
+  --font: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px)); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-text-size-adjust: 100%;
+}
+img { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.band { padding-block: clamp(56px, 9vw, 112px); }
+.band.soft { background: var(--bg-soft); }
+.band.mute { background: var(--bg-mute); }
+
+/* 상단 바 */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
+.brand { font-weight: 700; font-size: 17px; text-decoration: none; white-space: nowrap; }
+.nav { display: flex; gap: clamp(12px, 2.4vw, 28px); overflow-x: auto; min-width: 0; scrollbar-width: none; }
+.nav::-webkit-scrollbar { display: none; }
+.nav a { font-size: 15px; color: var(--fg-2); text-decoration: none; white-space: nowrap; padding: 6px 0; }
+.nav a:hover { color: var(--fg); }
+@media (max-width: 599px) { .nav { display: none; } }
+.top-cta { display: none; }
+@media (max-width: 599px) {
+  .top-cta { display: inline-flex; min-height: 38px; padding: 0 14px; font-size: 15px; border-radius: 10px; }
+}
+
+/* 버튼 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 52px; padding: 0 28px; border-radius: 14px; border: 1px solid transparent;
+  font: 700 18px/1 var(--font); text-decoration: none; cursor: pointer;
+}
+.btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-press); }
+.btn.primary:disabled { opacity: .6; cursor: progress; }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line-strong); }
+.btn.ghost:hover { background: var(--bg-mute); }
+
+/* 1. 히어로 */
+.hero { background: var(--bg-warm); padding-block: clamp(40px, 7vw, 88px); }
+.hero .wrap { display: grid; gap: clamp(32px, 5vw, 64px); grid-template-columns: minmax(0, 1fr); align-items: center; }
+@media (min-width: 900px) { .hero .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); } }
+.eyebrow { font-size: 15px; font-weight: 700; color: var(--accent-ink); letter-spacing: 0.02em; }
+.hero h1 { font-size: clamp(2.1rem, 6.4vw, 4.1rem); font-weight: 700; line-height: 1.22; letter-spacing: -0.02em; margin-top: 16px; text-wrap: balance; }
+.hero .lead { font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--fg-2); margin-top: 24px; max-width: 34em; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line-strong); }
+@media (min-width: 600px) { .facts { grid-template-columns: repeat(4, max-content); } }
+.facts div { min-width: 0; }
+.facts dt { font-size: 13px; color: var(--fg-3); }
+.facts dd { font-size: 17px; font-weight: 700; }
+.art { min-width: 0; }
+.art-frame {
+  width: 100%; max-width: 100%; aspect-ratio: 4 / 5; border-radius: 20px;
+  background: var(--bg); border: 2px dashed var(--line-strong);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  color: var(--fg-3); text-align: center; padding: 24px; overflow: hidden;
+}
+.art-frame.has-img { padding: 0; border: 0; }
+.art-frame img { width: 100%; height: 100%; object-fit: cover; }
+.art-frame strong { color: var(--fg-2); font-size: 16px; }
+.art-frame span { font-size: 14px; }
+.art figcaption { font-size: 14px; color: var(--fg-3); margin-top: 12px; }
+@media (max-width: 899px) { .art-frame { aspect-ratio: 4 / 3; } }
+
+/* 섹션 머리 */
+.split { display: grid; gap: 32px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .split { grid-template-columns: 280px minmax(0, 1fr); gap: 64px; } }
+.split > * { min-width: 0; }
+.kicker { font-size: 14px; font-weight: 700; color: var(--accent-ink); }
+.split h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); line-height: 1.3; letter-spacing: -0.015em; margin-top: 10px; text-wrap: balance; }
+.split .sub { font-size: 16px; color: var(--fg-3); margin-top: 14px; }
+@media (min-width: 900px) { .split > .head { position: sticky; top: 96px; align-self: start; } }
+
+/* 2. 강의 소개 */
+.rule-list > li { border-top: 1px solid var(--line-strong); padding: 24px 0 28px; display: grid; gap: 6px; }
+.rule-list > li:last-child { border-bottom: 1px solid var(--line-strong); }
+.rule-list h3 { font-size: 20px; line-height: 1.4; }
+.rule-list p { color: var(--fg-2); max-width: 36em; }
+.for-who { margin-top: 48px; background: var(--bg-mute); border-radius: 20px; padding: clamp(20px, 3vw, 32px); }
+.for-who h3 { font-size: 18px; margin-bottom: 14px; }
+.for-who ul { display: grid; gap: 10px; }
+.for-who li { color: var(--fg-2); padding-left: 22px; position: relative; }
+.for-who li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+/* 3. 커리큘럼 */
+.goal { background: var(--accent-soft); border-radius: 16px; padding: 18px 22px; color: var(--fg); margin-bottom: 28px; }
+.goal b { color: var(--accent-ink); margin-right: 6px; }
+.phase-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-bottom: 8px; }
+.phase-strip span { height: 8px; border-radius: 4px; }
+.phase { margin-top: 28px; }
+.phase h3 { display: flex; align-items: center; gap: 10px; font-size: 17px; margin-bottom: 4px; }
+.phase h3 i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex: none; }
+.weeks > li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 2px 16px; padding: 16px 0; border-top: 1px solid var(--line); }
+.weeks .no { font-weight: 700; color: var(--fg-3); font-variant-numeric: tabular-nums; }
+.weeks .topic { font-weight: 700; font-size: 18px; }
+.weeks .draw { grid-column: 2; color: var(--fg-2); font-size: 16px; }
+@media (min-width: 700px) {
+  .weeks > li { grid-template-columns: 56px 220px minmax(0, 1fr); align-items: baseline; }
+  .weeks .draw { grid-column: auto; }
+}
+.cur-note { margin-top: 28px; font-size: 14px; color: var(--fg-3); }
+
+/* 4. 수업 분위기 */
+.flow-bar { display: flex; gap: 4px; height: 20px; margin-top: 8px; }
+.flow-bar span { border-radius: 6px; display: block; min-width: 0; }
+.flow-scale { display: flex; justify-content: space-between; font-size: 13px; color: var(--fg-3); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px 20px; margin-top: 18px; }
+.legend li { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--fg-2); }
+.legend i { width: 12px; height: 12px; border-radius: 4px; flex: none; display: inline-block; }
+.legend b { color: var(--fg); }
+.notes { margin-top: 36px; display: grid; gap: 14px; }
+.notes li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
+.notes b { font-size: 15px; }
+.notes span { color: var(--fg-2); }
+
+/* 5. 강사 */
+.teacher { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 700px) { .teacher { grid-template-columns: 200px minmax(0, 1fr); gap: 40px; } }
+.teacher > * { min-width: 0; }
+.portrait { width: 200px; max-width: 100%; aspect-ratio: 1 / 1; border-radius: 20px; background: var(--bg); border: 2px dashed var(--line-strong); display: flex; align-items: center; justify-content: center; color: var(--fg-3); font-size: 14px; text-align: center; padding: 12px; overflow: hidden; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; }
+.teacher h3 { font-size: 24px; }
+.teacher .one { color: var(--fg-2); margin-top: 6px; }
+.career { margin-top: 24px; }
+.career li { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line-strong); }
+.career li:last-child { border-bottom: 1px solid var(--line-strong); }
+.tag { flex: none; font-size: 13px; font-weight: 700; color: var(--fg-3); background: var(--bg); border-radius: 6px; padding: 2px 8px; align-self: flex-start; margin-top: 3px; }
+
+/* 6. 수강 안내 */
+.info > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 16px 0; border-top: 1px solid var(--line-strong); }
+.info > div:last-child { border-bottom: 1px solid var(--line-strong); }
+.info dt { font-weight: 700; font-size: 15px; }
+.info dd { color: var(--fg-2); min-width: 0; }
+.pill { display: inline-block; font-size: 13px; font-weight: 700; line-height: 1.6; color: var(--fg-3); background: var(--bg-mute); border-radius: 999px; padding: 0 10px; margin-right: 6px; vertical-align: 1px; }
+
+/* 7. 문의 */
+.contact-card { background: var(--bg); border: 1px solid var(--line); border-radius: 24px; padding: clamp(20px, 4vw, 40px); }
+.form-grid { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 700px) { .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .form-grid .full { grid-column: 1 / -1; } }
+.field { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.field label { font-size: 15px; font-weight: 700; }
+.field label small { font-weight: 400; color: var(--fg-3); margin-left: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 52px; padding: 12px 16px; font: 400 17px/1.5 var(--font); color: var(--fg);
+  background: var(--bg); border: 1px solid var(--line-strong); border-radius: 12px;
+}
+.field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--fg-3) 50%), linear-gradient(135deg, var(--fg-3) 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 40px; }
+.field textarea { min-height: 160px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 3px solid var(--accent-soft-2); border-color: var(--accent); }
+.err { color: var(--danger); font-size: 14px; }
+.err:empty { display: none; }
+.field.bad input, .field.bad select, .field.bad textarea { border-color: var(--danger); }
+.consent { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: var(--fg-2); cursor: pointer; }
+.consent input { width: 22px; height: 22px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.consent-wrap .err { margin-top: 6px; padding-left: 34px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+.form-actions p { font-size: 14px; color: var(--fg-3); }
+.done h3 { font-size: 24px; }
+.done p { color: var(--fg-2); margin-top: 10px; }
+.done .btn { margin-top: 24px; }
+
+/* 8. 푸터 */
+footer { padding-block: 40px 56px; border-top: 1px solid var(--line); color: var(--fg-3); font-size: 14px; }
+footer .wrap { display: grid; gap: 6px; }
+
+/* 모바일 하단 고정 문의 버튼 */
+.dock { display: none; }
+@media (max-width: 599px) {
+  .dock {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: var(--bg); border-top: 1px solid var(--line);
+    transition: transform .25s ease;
+  }
+  .dock .btn { width: 100%; }
+  .dock.away { transform: translateY(110%); }
+  footer { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { .dock { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">어반스케치 클래스</a>
+    <nav class="nav" aria-label="섹션 이동">
+      <a href="#intro">소개</a>
+      <a href="#curriculum">커리큘럼</a>
+      <a href="#atmosphere">수업 분위기</a>
+      <a href="#teacher">강사</a>
+      <a href="#info">수강 안내</a>
+      <a href="#contact">문의</a>
+    </nav>
+    <a class="btn primary top-cta" href="#contact">문의하기</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- 1. 히어로 -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">어반스케치 초보자 8주 과정</p>
+        <h1 id="hero-title">선 하나 긋는 것부터, 편안한 집에서</h1>
+        <p class="lead">그림을 처음 그리는 분을 위한 수업입니다. 강사의 집에서 소수의 인원으로 천천히 배우고, 8주 뒤에는 야외에서 스케치 한 장을 직접 완성합니다. 재료는 모두 준비해 드립니다.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="#contact">문의하기</a>
+          <a class="btn ghost" href="#curriculum">커리큘럼 보기</a>
+        </div>
+        <dl class="facts">
+          <div><dt>기간</dt><dd>8주 과정</dd></div>
+          <div><dt>수업</dt><dd>주 1회 2시간</dd></div>
+          <div><dt>장소</dt><dd>강사의 집</dd></div>
+          <div><dt>재료</dt><dd>강사 제공</dd></div>
+        </dl>
+      </div>
+      <figure class="art">
+        <!-- 대표 작품 사진: 파일을 받으면 아래 div에 class="has-img" 를 추가하고 안쪽을
+             <img src="images/hero.jpg" alt="강사가 그린 골목 풍경 어반스케치"> 로 바꿔 주세요. -->
+        <div class="art-frame" id="hero-art">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 46l4-12L38 10l8 8-24 24z"/><path d="M34 14l8 8"/><path d="M10 46l12-4"/></svg>
+          <strong>대표 작품 사진</strong>
+          <span>사진 추가 예정</span>
+        </div>
+        <figcaption>강사의 대표 작품</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. 강의 소개 -->
+  <section id="intro" class="band" aria-labelledby="intro-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">강의 소개</p>
+        <h2 id="intro-title">처음이어도 괜찮은 수업</h2>
+        <p class="sub">잘 그리는 법보다, 그리는 일이 편해지는 방법을 먼저 배웁니다.</p>
+      </div>
+      <div>
+        <ul class="rule-list">
+          <li>
+            <h3>처음 그리는 분을 위한 수업입니다</h3>
+            <p>그림 경험이 없어도 됩니다. 펜 잡는 법과 선 긋기부터 시작해, 8주 뒤 야외에서 30분 안에 스케치 한 장을 완성합니다.</p>
+          </li>
+          <li>
+            <h3>강사의 집에서 소규모로 진행합니다</h3>
+            <p>교실 대신 집에서 편하게 모입니다. 인원이 적어서 한 분 한 분의 그림을 가까이에서 봐드립니다.</p>
+          </li>
+          <li>
+            <h3>재료는 준비해 드립니다</h3>
+            <p>첫 수업에 개인 키트를 드립니다. 스케치북, 방수 펜, 연필, 수채물감, 물붓이 들어 있습니다. 재료비는 수강료와 따로 안내합니다.</p>
+          </li>
+        </ul>
+        <div class="for-who">
+          <h3>이런 분께 권합니다</h3>
+          <ul>
+            <li>그림은 처음이지만 취미를 갖고 싶은 분</li>
+            <li>혼자 시작하기엔 막막했던 분</li>
+            <li>여행과 일상을 직접 그려 기록하고 싶은 분</li>
+            <li>큰 강의실보다 작은 모임이 편한 분</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 커리큘럼 -->
+  <section id="curriculum" class="band soft" aria-labelledby="cur-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">커리큘럼</p>
+        <h2 id="cur-title">선에서 시작해 야외 스케치까지</h2>
+        <p class="sub">4단계 8주. 앞 주에 그린 그림이 다음 주의 바탕이 됩니다.</p>
+      </div>
+      <div>
+        <p class="goal"><b>최종 목표</b>8주차에 야외에서 30분 안에 스케치 한 장 완성</p>
+
+        <div class="phase-strip" aria-hidden="true">
+          <span style="background: var(--c-line)"></span>
+          <span style="background: var(--c-struct)"></span>
+          <span style="background: var(--c-color)"></span>
+          <span style="background: var(--c-field)"></span>
+        </div>
+
+        <div class="phase">
+          <h3><i style="background: var(--c-line)"></i>1~2주 · 선과 형태</h3>
+          <ol class="weeks">
+            <li><span class="no">1주</span><span class="topic">도구 이해와 선 연습</span><span class="draw">선 연습 1장, 책상 위 물건 3개</span></li>
+            <li><span class="no">2주</span><span class="topic">형태 단순화</span><span class="draw">컵 · 병 · 건물을 도형으로 나눠 그리기</span></li>
+          </ol>
+        </div>
+        <div class="phase">
+          <h3><i style="background: var(--c-struct)"></i>3~4주 · 구조와 원근</h3>
+          <ol class="weeks">
+            <li><span class="no">3주</span><span class="topic">원근법 기초</span><span class="draw">눈높이선과 소실점으로 골목길 그리기</span></li>
+            <li><span class="no">4주</span><span class="topic">건물 구조와 디테일</span><span class="draw">사진을 보고 건물 1채 완성</span></li>
+          </ol>
+        </div>
+        <div class="phase">
+          <h3><i style="background: var(--c-color)"></i>5~6주 · 채색</h3>
+          <ol class="weeks">
+            <li><span class="no">5주</span><span class="topic">수채 채색 기초</span><span class="draw">색상 차트, 내 건물 그림에 색 입히기</span></li>
+            <li><span class="no">6주</span><span class="topic">명암과 질감</span><span class="draw">빛과 그림자가 있는 건물 채색</span></li>
+          </ol>
+        </div>
+        <div class="phase">
+          <h3><i style="background: var(--c-field)"></i>7~8주 · 구도와 현장</h3>
+          <ol class="weeks">
+            <li><span class="no">7주</span><span class="topic">구도와 풍경</span><span class="draw">구도 3안을 그려 보고 풍경 1장 완성</span></li>
+            <li><span class="no">8주</span><span class="topic">야외 실전 스케치</span><span class="draw">야외에서 30분 스케치 1장, 작품 함께 보기</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 수업 분위기 -->
+  <section id="atmosphere" class="band" aria-labelledby="atm-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">수업 분위기</p>
+        <h2 id="atm-title">집에서, 천천히, 가까이서</h2>
+        <p class="sub">한 회차는 120분입니다.</p>
+      </div>
+      <div>
+        <div class="flow-bar" role="img" aria-label="한 회차 120분 구성: 워밍업 10분, 시연 20분, 실습 60분, 피드백 20분, 정리 10분">
+          <span style="flex: 10; background: var(--line-strong)"></span>
+          <span style="flex: 20; background: var(--accent-soft-2)"></span>
+          <span style="flex: 60; background: var(--accent)"></span>
+          <span style="flex: 20; background: var(--accent-soft-2)"></span>
+          <span style="flex: 10; background: var(--line-strong)"></span>
+        </div>
+        <div class="flow-scale" aria-hidden="true"><span>0분</span><span>60분</span><span>120분</span></div>
+        <ul class="legend">
+          <li><i style="background: var(--line-strong)"></i><b>워밍업</b> 10분</li>
+          <li><i style="background: var(--accent-soft-2)"></i><b>시연</b> 20분</li>
+          <li><i style="background: var(--accent)"></i><b>실습</b> 60분</li>
+          <li><i style="background: var(--accent-soft-2)"></i><b>피드백</b> 20분</li>
+          <li><i style="background: var(--line-strong)"></i><b>정리</b> 10분</li>
+        </ul>
+        <ul class="notes">
+          <li><b>시연</b><span>강사가 눈앞에서 직접 그리며 설명합니다.</span></li>
+          <li><b>실습</b><span>주제별로 직접 그리는 동안 강사가 옆에서 지도합니다.</span></li>
+          <li><b>피드백</b><span>작품을 벽에 붙이고 “좋은 점 1개 + 제안 1개”를 나눕니다. 점수는 매기지 않습니다.</span></li>
+          <li><b>장소</b><span>정확한 주소는 수강이 확정된 분께 따로 알려드립니다. 8주차는 야외에서 진행합니다.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 강사 소개 (임시 내용: 실제 이력으로 교체) -->
+  <section id="teacher" class="band mute" aria-labelledby="teacher-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">강사 소개</p>
+        <h2 id="teacher-title">함께 그릴 강사입니다</h2>
+      </div>
+      <div class="teacher">
+        <!-- 프로필 사진: 안쪽 텍스트를 <img src="images/profile.jpg" alt="[강사 이름] 프로필 사진"> 로 교체 -->
+        <div class="portrait">프로필 사진<br>추가 예정</div>
+        <div>
+          <h3>[강사 이름]</h3>
+          <p class="one">[한 줄 소개를 입력하세요]</p>
+          <ul class="career">
+            <li><span class="tag">예시</span><span>어반스케치 활동 경력 ○년</span></li>
+            <li><span class="tag">예시</span><span>국내외 어반스케치 모임 참여</span></li>
+            <li><span class="tag">예시</span><span>개인 스케치북 전시 또는 드로잉북 출간</span></li>
+            <li><span class="tag">예시</span><span>문화센터 · 소규모 클래스 강의 경력</span></li>
+            <li><span class="tag">예시</span><span>누적 수강생 ○○명</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 수강 안내 -->
+  <section id="info" class="band" aria-labelledby="info-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">수강 안내</p>
+        <h2 id="info-title">신청 전에 확인해 주세요</h2>
+        <p class="sub">미정 항목은 확정되는 대로 이 페이지에 안내합니다.</p>
+      </div>
+      <dl class="info">
+        <div><dt>과정</dt><dd>어반스케치 초보자 8주 과정, 주 1회 2시간 (총 8회 16시간)</dd></div>
+        <div><dt>대상</dt><dd>드로잉 경험이 없는 성인</dd></div>
+        <div><dt>장소</dt><dd>강사의 집 (8주차는 야외). 상세 위치는 수강 확정 후 안내</dd></div>
+        <div><dt>재료</dt><dd>강사 제공: 스케치북, 방수 펜, 연필, 수채물감, 물붓</dd></div>
+        <div><dt>준비물</dt><dd>편한 복장. 8주차에는 모자와 선크림, 접이식 간이의자(선택)</dd></div>
+        <div><dt>정원</dt><dd><span class="pill">미정</span>소수 정원으로 운영</dd></div>
+        <div><dt>수강료</dt><dd><span class="pill">미정</span>추후 안내</dd></div>
+        <div><dt>재료비</dt><dd><span class="pill">미정</span>수강료와 별도로 청구</dd></div>
+        <div><dt>일정</dt><dd><span class="pill">미정</span>개강일, 요일, 시간은 추후 안내</dd></div>
+        <div><dt>환불</dt><dd><span class="pill">미정</span>추후 안내</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 7. Contact Us -->
+  <section id="contact" class="band soft" aria-labelledby="contact-title">
+    <div class="wrap split">
+      <div class="head">
+        <p class="kicker">Contact Us</p>
+        <h2 id="contact-title">궁금한 점을 남겨 주세요</h2>
+        <p class="sub">남겨 주신 이메일로 답변드립니다.</p>
+      </div>
+      <div class="contact-card">
+        <form id="contact-form" novalidate>
+          <div class="form-grid">
+            <div class="field" id="f-name">
+              <label for="name">이름</label>
+              <input id="name" name="name" type="text" autocomplete="name">
+              <p class="err" id="e-name" role="alert"></p>
+            </div>
+            <div class="field" id="f-email">
+              <label for="email">이메일</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email">
+              <p class="err" id="e-email" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="phone">연락처<small>선택</small></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
+            </div>
+            <div class="field" id="f-topic">
+              <label for="topic">문의 유형</label>
+              <select id="topic" name="topic">
+                <option value="">선택해 주세요</option>
+                <option value="수강 신청">수강 신청</option>
+                <option value="일정·장소">일정 · 장소</option>
+                <option value="재료·준비물">재료 · 준비물</option>
+                <option value="기타">기타</option>
+              </select>
+              <p class="err" id="e-topic" role="alert"></p>
+            </div>
+            <div class="field full" id="f-message">
+              <label for="message">문의 내용</label>
+              <textarea id="message" name="message"></textarea>
+              <p class="err" id="e-message" role="alert"></p>
+            </div>
+            <div class="full consent-wrap">
+              <label class="consent" for="agree">
+                <input id="agree" name="agree" type="checkbox">
+                <span>답변을 위해 이름, 이메일, 연락처, 문의 내용을 수집하는 데 동의합니다. 입력하신 정보는 문의 답변에만 사용합니다.</span>
+              </label>
+              <p class="err" id="e-agree" role="alert"></p>
+            </div>
+            <div class="full form-actions">
+              <button class="btn primary" type="submit" id="submit">문의 남기기</button>
+              <p class="err" id="e-send" role="alert"></p>
+            </div>
+          </div>
+        </form>
+        <div class="done" id="done" hidden>
+          <h3 id="done-title">문의를 받았습니다</h3>
+          <p id="done-text">남겨 주신 이메일로 답변드리겠습니다.</p>
+          <button class="btn ghost" type="button" id="again">다른 문의 작성하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>[강사 이름] · 어반스케치 초보자 클래스</p>
+    <p>문의 시 입력하신 정보는 답변 목적으로만 사용합니다.</p>
+  </div>
+</footer>
+
+<div class="dock" id="dock">
+  <a class="btn primary" href="#contact">수업 문의하기</a>
+</div>
+
+<script>
+/*
+  문의 폼 접수 주소 (기획서 7장: Google Sheets + Apps Script)
+  - Apps Script 웹 앱을 배포한 뒤 그 URL을 아래에 넣으면 실제로 전송됩니다.
+  - 비워 두면 전송 없이 완료 화면만 보여 줍니다 (미리보기용).
+*/
+var FORM_ENDPOINT = '';
+
+(function () {
+  var form = document.getElementById('contact-form');
+  var done = document.getElementById('done');
+  var again = document.getElementById('again');
+  var submitBtn = document.getElementById('submit');
+
+  function setErr(key, msg) {
+    var f = document.getElementById('f-' + key);
+    var e = document.getElementById('e-' + key);
+    if (e) e.textContent = msg || '';
+    if (f) f.classList.toggle('bad', !!msg);
+  }
+
+  function val(id) { return document.getElementById(id).value.trim(); }
+
+  function validate() {
+    var ok = true;
+    var name = val('name'), email = val('email'), topic = val('topic'), message = val('message');
+    var agree = document.getElementById('agree').checked;
+
+    setErr('name', name ? '' : '이름을 입력해 주세요.');
+    if (!name) ok = false;
+
+    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+    setErr('email', emailOk ? '' : '답변받을 이메일 주소를 정확히 입력해 주세요.');
+    if (!emailOk) ok = false;
+
+    setErr('topic', topic ? '' : '문의 유형을 골라 주세요.');
+    if (!topic) ok = false;
+
+    setErr('message', message.length >= 5 ? '' : '문의 내용을 5자 이상 입력해 주세요.');
+    if (message.length < 5) ok = false;
+
+    setErr('agree', agree ? '' : '개인정보 수집에 동의해 주세요.');
+    if (!agree) ok = false;
+
+    return ok;
+  }
+
+  function showDone(name, sent) {
+    document.getElementById('done-title').textContent = name + '님, 문의를 받았습니다';
+    document.getElementById('done-text').textContent = sent
+      ? '남겨 주신 이메일로 답변드리겠습니다.'
+      : '지금은 미리보기라 실제로 전송되지 않았습니다. 접수 주소를 연결하면 같은 폼으로 문의가 접수됩니다.';
+    form.hidden = true;
+    done.hidden = false;
+    done.scrollIntoView({ block: 'nearest' });
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    setErr('send', '');
+    if (!validate()) {
+      var first = form.querySelector('.bad input, .bad select, .bad textarea');
+      if (first) first.focus();
+      else if (!document.getElementById('agree').checked) document.getElementById('agree').focus();
+      return;
+    }
+    var name = val('name');
+    if (!FORM_ENDPOINT) { showDone(name, false); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '보내는 중…';
+    var data = new URLSearchParams({
+      name: name, email: val('email'), phone: val('phone'),
+      topic: val('topic'), message: val('message'), submittedAt: new Date().toISOString()
+    });
+    fetch(FORM_ENDPOINT, { method: 'POST', mode: 'no-cors', body: data })
+      .then(function () { showDone(name, true); })
+      .catch(function () { setErr('send', '전송하지 못했습니다. 인터넷 연결을 확인하고 다시 눌러 주세요.'); })
+      .finally(function () { submitBtn.disabled = false; submitBtn.textContent = '문의 남기기'; });
+  });
+
+  again.addEventListener('click', function () {
+    form.reset();
+    ['name', 'email', 'topic', 'message', 'agree', 'send'].forEach(function (k) { setErr(k, ''); });
+    done.hidden = true;
+    form.hidden = false;
+    document.getElementById('name').focus();
+  });
+
+  // 모바일 하단 문의 버튼: 문의 섹션이 화면에 보이면 숨김
+  var dock = document.getElementById('dock');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      dock.classList.toggle('away', entries[0].isIntersecting);
+    }, { threshold: 0.05 }).observe(document.getElementById('contact'));
+  }
+})();
+</script>
+</body>
+</html>
